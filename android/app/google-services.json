@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "317108922054",
+    "firebase_url": "https://anjodaguarda-4e4ee.firebaseio.com",
+    "project_id": "anjodaguarda-4e4ee",
+    "storage_bucket": "anjodaguarda-4e4ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317108922054:android:76fafc18b6f335088899c7",
+        "android_client_info": {
+          "package_name": "com.example.anjo_guarda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317108922054-qsh1a774gaaj0dlr9q7sb3uerkshmpfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anjo_guarda",
+            "certificate_hash": "b1cf0c6e89b6d20cc1b45ef322ed8490000b1ec0"
+          }
+        },
+        {
+          "client_id": "317108922054-ndqjk5bm3pg5qo1n7d435cbp60crvdkl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW7lBbMZ3IrNzQB-KJSe6U2tCL1Klg2JU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317108922054-ndqjk5bm3pg5qo1n7d435cbp60crvdkl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
