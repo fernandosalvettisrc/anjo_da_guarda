@@ -31,7 +31,7 @@ class UserRepository {
       password: password,
     );
   }
-Future<void> signUp({String email, String password, ResponsavelModel userModel}) async {
+Future<void> signUp({String email, String password, UsuarioModel userModel}) async {
     
     var userAuth = await _firebaseAuth.createUserWithEmailAndPassword
                     (email: email,password: password);
@@ -39,7 +39,7 @@ Future<void> signUp({String email, String password, ResponsavelModel userModel})
     {
       userModel.id = userAuth.user.uid;
       _firestore
-        .collection("responsavel")
+        .collection("user")
         .document(userModel.id)
         .setData(userModel.toJson());
     }
@@ -62,19 +62,19 @@ Future<String> getUserId() async {
     return (await  _firebaseAuth.currentUser()).uid;
   }
 
-   Stream<ResponsavelModel> getUser(String userID){
+   Stream<UsuarioModel> getUser(String userID){
     
-     return _firestore.collection("responsavel")
+     return _firestore.collection("user")
                       .document(userID)
                       .snapshots()
-                      .map((snap) => ResponsavelModel.fromMap(snap.documentID, snap.data));
+                      .map((snap) => UsuarioModel.fromMap(snap.documentID, snap.data));
   }
 
-   Future<void> update(ResponsavelModel userModel) async {
+   Future<void> update(UsuarioModel userModel) async {
     try
     {
       return _firestore
-        .collection("responsavel").document(userModel.id)
+        .collection("user").document(userModel.id)
           .setData(userModel.toJson(),merge: true);
     }catch(error)
     {

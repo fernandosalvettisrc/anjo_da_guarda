@@ -92,7 +92,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> _mapFormSubmittedToState(
     String email,
     String password,
-    ResponsavelModel responsavelModel
+    UsuarioModel responsavelModel
   ) async* {
     yield RegisterState.loading();
     try {

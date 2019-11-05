@@ -329,7 +329,7 @@ class _RegisterFormState extends State<RegisterForm> {
       Submitted(
           email: _emailController.text,
           password: _passwordController.text,
-          novoUsuario: ResponsavelModel(
+          novoUsuario: UsuarioModel(
             nome: _nomeController.text,
             cep: _cepController.text,
             cpf: _cpfController.text,
