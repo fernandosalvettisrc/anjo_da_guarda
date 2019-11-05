@@ -17,6 +17,7 @@ dependencies:
   equatable: ^0.2.0
   meta: ^1.1.6
   font_awesome_flutter: ^8.4.0
+  masked_text: ^0.0.6
 
 dev_dependencies:
   flutter_test:
