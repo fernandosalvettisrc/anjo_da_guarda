@@ -1,4 +1,3 @@
-
 import 'package:anjo_guarda/screens/login/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +17,20 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   LoginBloc _loginBloc;
-
+  var linearGradient = const BoxDecoration(
+    gradient: const LinearGradient(
+      begin: FractionalOffset.topCenter,
+      end: FractionalOffset.bottomCenter,
+      colors: <Color>[
+        const Color(0xFFFFFFFF),
+        const Color(0xFFFFFFFF),
+        const Color(0xFFFFFFFF),
+        const Color(0xFF00897B),
+        const Color(0xFF00796B),
+        const Color(0XFF004D40),
+      ],
+    ),
+  );
   UserRepository get _userRepository => widget._userRepository;
 
   @override
@@ -32,11 +44,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: BlocProvider<LoginBloc>(
-        bloc: _loginBloc,
-        child: LoginForm(userRepository: _userRepository),
+      appBar: AppBar(
+        title: Text('Anjo da Guarda'),
+        backgroundColor: Colors.teal,
       ),
+      body: BlocProvider<LoginBloc>(
+          bloc: _loginBloc,
+          child: Container(
+            width: double.maxFinite,
+            height: double.maxFinite,
+            decoration: linearGradient,
+            child: LoginForm(userRepository: _userRepository),
+          )),
     );
   }
 

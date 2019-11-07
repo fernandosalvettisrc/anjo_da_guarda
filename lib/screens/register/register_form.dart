@@ -21,7 +21,7 @@ class _RegisterFormState extends State<RegisterForm> {
       TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
-
+  int selectTipoUsuario = 0;
   RegisterBloc _registerBloc;
   bool _obscureText = true;
   Color corIcon = Colors.black;
@@ -63,7 +63,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registering...'),
+                    Text('Cadastrando...'),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -82,7 +82,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Registration Failure'),
+                    Text('Falha no cadastro'),
                     Icon(Icons.error),
                   ],
                 ),
@@ -94,93 +94,102 @@ class _RegisterFormState extends State<RegisterForm> {
       child: BlocBuilder(
         bloc: _registerBloc,
         builder: (BuildContext context, RegisterState state) {
-          return Padding(
-            padding: EdgeInsets.all(20),
-            child: Form(
-              child: ListView(
-                children: <Widget>[
-                  Card(
-                    child: ListTile(
-                      title: Text("Nome"),
-                      subtitle: TextFormField(
-                        controller: _nomeController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.person),
-                        ),
-                        autocorrect: false,
-                        autovalidate: true,
+          return Form(
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _nomeController,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person, color: Colors.teal[900]),
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
                       ),
+                      labelText: "Nome",
                     ),
+                    autocorrect: false,
+                    autovalidate: true,
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("Email"),
-                      subtitle: TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.email),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email, color: Colors.teal[900]),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
                         ),
-                        autocorrect: false,
-                        autovalidate: true,
-                        validator: (_) {
-                          return !state.isEmailValid ? 'Email inválido' : null;
-                        },
-                      ),
-                    ),
+                        labelText: "Email"),
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.isEmailValid ? 'Email inválido' : null;
+                    },
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("Senha"),
-                      subtitle: TextFormField(
-                        controller: _passwordController,
-                        obscureText: _obscureTextSenha,
-                        autocorrect: false,
-                        autovalidate: true,
-                        validator: (_) {
-                          return !state.isPasswordValid
-                              ? "Conteúdo inválido!"
-                              : null;
-                        },
-                      ),
-                      leading: Icon(Icons.lock, color: Colors.teal[900]),
-                      trailing: IconButton(
-                        icon: Icon(
-                          Icons.remove_red_eye,
-                          color: corIconSenha,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscureTextSenha,
+                    autocorrect: false,
+                    autovalidate: true,
+                    decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(color: Colors.grey),
                         ),
-                        onPressed: () {
-                          setState(() {
-                            if (corIconSenha == Colors.black) {
-                              _obscureTextSenha = false;
-                            } else {
-                              _obscureTextSenha = true;
-                            }
-                            if (corIconSenha == Colors.black) {
-                              corIconSenha = Colors.teal[900];
-                            } else {
-                              corIconSenha = Colors.black;
-                            }
-                          });
-                        },
-                      ),
-                    ),
+                        prefix: IconButton(
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: corIconSenha,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (corIconSenha == Colors.black) {
+                                _obscureTextSenha = false;
+                              } else {
+                                _obscureTextSenha = true;
+                              }
+                              if (corIconSenha == Colors.black) {
+                                corIconSenha = Colors.teal[900];
+                              } else {
+                                corIconSenha = Colors.black;
+                              }
+                            });
+                          },
+                        ),
+                        labelText: "Senha"),
+                    validator: (_) {
+                      return !state.isPasswordValid
+                          ? "Conteúdo inválido!"
+                          : null;
+                    },
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("Confirmar senha"),
-                      subtitle: TextFormField(
-                        controller: _passwordVerifyController,
-                        obscureText: _obscureText,
-                        autocorrect: false,
-                        autovalidate: true,
-                        validator: (_) {
-                          return !state.isPasswordVerifyValid
-                              ? "Senhas não conferem!"
-                              : null;
-                        },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _passwordVerifyController,
+                    obscureText: _obscureText,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.isPasswordVerifyValid
+                          ? "Senhas não conferem!"
+                          : null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Digite sua senha novamente",
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
                       ),
-                      leading: Icon(Icons.lock, color: Colors.teal[900]),
-                      trailing: IconButton(
+                      prefix: IconButton(
                         icon: Icon(
                           Icons.remove_red_eye,
                           color: corIcon,
@@ -202,64 +211,95 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                     ),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("CPF"),
-                      subtitle: MaskedTextField(
-                        maskedTextFieldController: _cpfController,
-                        mask: "xxx.xxx.xxx-xx",
-                        maxLength: 14,
-                        keyboardType: TextInputType.number,
+                ),
+                Card(
+                  shape: OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                    borderSide: new BorderSide(),
+                  ),
+                  child: DropdownButton(
+                    isExpanded: true,
+                    value: selectTipoUsuario,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.teal[900],
+                    ),
+                    style: TextStyle(color: Colors.black),
+                    underline: Container(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectTipoUsuario = value;
+                      });
+                    },
+                    items: tipoUsuario,
+                  ),
+                ),
+                MaskedTextField(
+                  maskedTextFieldController: _cpfController,
+                  mask: "xxx.xxx.xxx-xx",
+                  maxLength: 14,
+                  keyboardType: TextInputType.number,
+                  inputDecoration: InputDecoration(
+                      labelText: "CPF",
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
                       ),
-                      leading: Icon(Icons.person, color: Colors.teal[900]),
+                      prefixIcon:
+                          Icon(Icons.keyboard, color: Colors.teal[900])),
+                ),
+                MaskedTextField(
+                  maskedTextFieldController: _cepController,
+                  mask: "xxxxx-xxx",
+                  maxLength: 9,
+                  keyboardType: TextInputType.number,
+                  inputDecoration: InputDecoration(
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
+                    labelText: "CEP",
+                    prefixIcon: Icon(
+                      Icons.place,
+                      color: Colors.teal[900],
                     ),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("CEP"),
-                      subtitle: MaskedTextField(
-                        maskedTextFieldController: _cepController,
-                        mask: "xxxxx-xxx",
-                        maxLength: 9,
-                        keyboardType: TextInputType.number,
-                      ),
-                      leading:
-                          Icon(Icons.calendar_today, color: Colors.teal[900]),
+                ),
+                MaskedTextField(
+                  maskedTextFieldController: _dataController,
+                  mask: "xx/xx/xxxx",
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  inputDecoration: InputDecoration(
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
                     ),
+                    labelText: "Data de nascimento",
+                    prefixIcon:
+                        Icon(Icons.calendar_today, color: Colors.teal[900]),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("Data de Nascimento"),
-                      subtitle: MaskedTextField(
-                        maskedTextFieldController: _dataController,
-                        mask: "xx/xx/xxxx",
-                        maxLength: 10,
-                        keyboardType: TextInputType.number,
-                      ),
-                      leading:
-                          Icon(Icons.calendar_today, color: Colors.teal[900]),
+                ),
+                MaskedTextField(
+                  maskedTextFieldController: _numeroController,
+                  mask: "(xx) xxxxx-xxxx",
+                  maxLength: 15,
+                  keyboardType: TextInputType.number,
+                  inputDecoration: InputDecoration(
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
                     ),
+                    labelText: "Celular",
+                    prefixIcon:
+                        Icon(Icons.phone_android, color: Colors.teal[900]),
                   ),
-                  Card(
-                    child: ListTile(
-                      title: Text("Celular"),
-                      subtitle: MaskedTextField(
-                        maskedTextFieldController: _numeroController,
-                        mask: "(xx) xxxxx-xxxx",
-                        maxLength: 15,
-                        keyboardType: TextInputType.number,
-                      ),
-                      leading:
-                          Icon(Icons.calendar_today, color: Colors.teal[900]),
-                    ),
-                  ),
-                  RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state)
-                        ? _onFormSubmitted
-                        : null,
-                  ),
-                ],
-              ),
+                ),
+                RegisterButton(
+                  onPressed:
+                      isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
+                ),
+              ],
             ),
           );
         },
@@ -334,9 +374,27 @@ class _RegisterFormState extends State<RegisterForm> {
             cep: _cepController.text,
             cpf: _cpfController.text,
             dataNasc: _dataController.text,
-            uf: _ufController.text,
+            uf: "RS",
             number: _numeroController.text,
           )),
     );
   }
+
+  final List<DropdownMenuItem> tipoUsuario = [
+    DropdownMenuItem(
+        value: 0,
+        child: Container(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Text("Tipo de usuário"))),
+    DropdownMenuItem(
+        value: 1,
+        child: Container(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Text("Responsável"))),
+    DropdownMenuItem(
+        value: 2,
+        child: Container(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Text("Tutorado"))),
+  ];
 }

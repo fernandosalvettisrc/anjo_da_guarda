@@ -83,7 +83,6 @@ class Submitted extends RegisterEvent {
   final String email;
   final String password;
   final UsuarioModel novoUsuario;
-
   Submitted({@required this.email, @required this.password, @required this.novoUsuario})
       : super([email, password, novoUsuario]);
 

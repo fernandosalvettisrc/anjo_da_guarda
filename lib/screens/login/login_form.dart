@@ -1,5 +1,4 @@
 import 'package:anjo_guarda/screens/login/create_account_button.dart';
-import 'package:anjo_guarda/screens/login/google_login_button.dart';
 import 'package:anjo_guarda/screens/login/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,7 +85,11 @@ class _LoginFormState extends State<LoginForm> {
             child: Form(
               child: ListView(
                 children: <Widget>[
-                  Image.asset('assets/logo.png', height: 200, width: 200,), 
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 200,
+                    width: 200,
+                  ),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -96,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return !state.isEmailValid ? 'Invalid Email' : null;
+                      return !state.isEmailValid ? 'Email inválido' : null;
                     },
                   ),
                   TextFormField(
@@ -109,7 +112,7 @@ class _LoginFormState extends State<LoginForm> {
                     autovalidate: true,
                     autocorrect: false,
                     validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                      return !state.isPasswordValid ? 'Senha inválida' : null;
                     },
                   ),
                   Padding(
@@ -118,11 +121,8 @@ class _LoginFormState extends State<LoginForm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         LoginButton(
-                          onPressed: isLoginButtonEnabled(state)
-                              ? _onFormSubmitted
-                              : null,
+                          onPressed:_onFormSubmitted
                         ),
-                        GoogleLoginButton(),
                         CreateAccountButton(userRepository: _userRepository),
                       ],
                     ),
