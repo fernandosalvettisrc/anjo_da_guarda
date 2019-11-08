@@ -21,7 +21,11 @@ class _RegisterFormState extends State<RegisterForm> {
       TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
-  int selectTipoUsuario = 0;
+  bool radioValor = true;
+  bool selecaoValorA = true;
+  bool selecaoValorB = false;
+  bool switchValor = false;
+  bool recebe;
   RegisterBloc _registerBloc;
   bool _obscureText = true;
   Color corIcon = Colors.black;
@@ -166,7 +170,7 @@ class _RegisterFormState extends State<RegisterForm> {
                         labelText: "Senha"),
                     validator: (_) {
                       return !state.isPasswordValid
-                          ? "Conteúdo inválido!"
+                          ? "A senha deve conter ao menos 6 caracteres e uma letra!"
                           : null;
                     },
                   ),
@@ -210,28 +214,6 @@ class _RegisterFormState extends State<RegisterForm> {
                         },
                       ),
                     ),
-                  ),
-                ),
-                Card(
-                  shape: OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
-                  child: DropdownButton(
-                    isExpanded: true,
-                    value: selectTipoUsuario,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.teal[900],
-                    ),
-                    style: TextStyle(color: Colors.black),
-                    underline: Container(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectTipoUsuario = value;
-                      });
-                    },
-                    items: tipoUsuario,
                   ),
                 ),
                 MaskedTextField(
@@ -295,6 +277,39 @@ class _RegisterFormState extends State<RegisterForm> {
                         Icon(Icons.phone_android, color: Colors.teal[900]),
                   ),
                 ),
+                Card(
+                  child: ListTile(
+                    title: Text("Selecione o tipo de usuário", textAlign: TextAlign.center,),
+                    subtitle: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Radio<bool>(
+                                activeColor: Colors.black,
+                                value: true,
+                                groupValue: radioValor,
+                                onChanged: tomaContaValorRadio),
+                            Text(
+                              "Responsavel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Radio<bool>(
+                              activeColor: Colors.black,
+                              value: false,
+                              groupValue: radioValor,
+                              onChanged: tomaContaValorRadio,
+                            ),
+                            Text(
+                              "Tutorado",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 RegisterButton(
                   onPressed:
                       isRegisterButtonEnabled(state) ? _onFormSubmitted : null,
@@ -305,6 +320,23 @@ class _RegisterFormState extends State<RegisterForm> {
         },
       ),
     );
+  }
+
+  void tomaContaValorRadio(bool valor) {
+    setState(() {
+      radioValor = valor;
+      switch (radioValor) {
+        case true:
+          recebe = valor;
+          break;
+
+        case false:
+          recebe = valor;
+          break;
+        default:
+          debugPrint("Nenhum tipo de usuário foi selecionado");
+      }
+    });
   }
 
   @override
@@ -376,25 +408,8 @@ class _RegisterFormState extends State<RegisterForm> {
             dataNasc: _dataController.text,
             uf: "RS",
             number: _numeroController.text,
+            tipoUsuario: recebe,
           )),
     );
   }
-
-  final List<DropdownMenuItem> tipoUsuario = [
-    DropdownMenuItem(
-        value: 0,
-        child: Container(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: Text("Tipo de usuário"))),
-    DropdownMenuItem(
-        value: 1,
-        child: Container(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: Text("Responsável"))),
-    DropdownMenuItem(
-        value: 2,
-        child: Container(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: Text("Tutorado"))),
-  ];
 }

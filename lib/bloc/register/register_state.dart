@@ -4,18 +4,22 @@ import 'package:meta/meta.dart';
 class RegisterState {
   final bool isEmailValid;
   final bool isPasswordValid;
+  final bool isPasswordVerifyValid;
+  final bool isUFValid;
+  final bool isNomeValid;
+  final bool isCEPValid;
+  final bool isCPFValid;
+  final bool isTipoUsuarioValid;
+  final bool isDataValid;
+  final bool isValidNumber;
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
-  final bool isUFValid;
-  final bool isCEPValid;
-  final bool isCPFValid;
-  final bool isPasswordVerifyValid;
-  final bool isDataValid;
-  final bool isValidNumber;
   bool get isFormValid => isEmailValid && isPasswordValid;
 
   RegisterState({
+    @required this.isNomeValid,
+    @required this.isTipoUsuarioValid,
     @required this.isEmailValid,
     @required this.isPasswordValid,
     @required this.isSubmitting,
@@ -42,6 +46,8 @@ class RegisterState {
       isPasswordVerifyValid: true,
       isDataValid: true,
       isValidNumber: true,
+      isNomeValid: true,
+      isTipoUsuarioValid: true,
     );
   }
 
@@ -58,6 +64,8 @@ class RegisterState {
       isDataValid: true,
       isCEPValid: true,
       isValidNumber: true,
+      isNomeValid: true,
+      isTipoUsuarioValid: true,
     );
   }
 
@@ -74,6 +82,8 @@ class RegisterState {
       isDataValid: true,
       isCEPValid: true,
       isValidNumber: true,
+      isNomeValid: true,
+      isTipoUsuarioValid: true,
     );
   }
 
@@ -90,15 +100,20 @@ class RegisterState {
       isDataValid: true,
       isCEPValid: true,
       isValidNumber: true,
+      isNomeValid: true,
+      isTipoUsuarioValid: true,
     );
   }
 
   RegisterState update({
     bool isEmailValid,
     bool isPasswordValid,
-    bool isUFValid,
-    bool isCPFValid,
     bool isPasswordVerifyValid,
+    bool isUFValid,
+    bool isNomeValid,
+    bool isCEPValid,
+    bool isCPFValid,
+    bool isTipoUsuarioValid,
     bool isDataValid,
     bool isValidNumber,
   }) {
@@ -106,6 +121,9 @@ class RegisterState {
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
       isUFValid: isUFValid,
+      isPasswordVerifyValid: isPasswordVerifyValid,
+      isNomeValid: isNomeValid,
+      isTipoUsuarioValid: isTipoUsuarioValid,
       isCPFValid: isCPFValid,
       isCEPValid: isCEPValid,
       isDataValid: isDataValid,
@@ -119,13 +137,16 @@ class RegisterState {
   RegisterState copyWith({
     bool isEmailValid,
     bool isPasswordValid,
+    bool isPasswordVerifyValid,
     bool isSubmitEnabled,
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
     bool isUFValid,
-    bool isCPFValid,
+    bool isNomeValid,
     bool isCEPValid,
+    bool isCPFValid,
+    bool isTipoUsuarioValid,
     bool isDataValid,
     bool isValidNumber,
   }) {
@@ -139,8 +160,11 @@ class RegisterState {
       isCPFValid: isCPFValid ?? this.isCPFValid,
       isUFValid: isUFValid ?? this.isUFValid,
       isDataValid: isDataValid ?? this.isDataValid,
-      isPasswordVerifyValid: isPasswordVerifyValid ?? this.isPasswordVerifyValid,
+      isPasswordVerifyValid:
+          isPasswordVerifyValid ?? this.isPasswordVerifyValid,
       isValidNumber: isValidNumber ?? this.isValidNumber,
+      isNomeValid: isNomeValid ?? this.isNomeValid,
+      isTipoUsuarioValid: isTipoUsuarioValid ?? this.isTipoUsuarioValid,
     );
   }
 
@@ -154,6 +178,9 @@ class RegisterState {
       isCPFValid: $isCPFValid,
       isUFValid: $isUFValid,
       isDataValid: $isDataValid,
+      isNomeValid: $isNomeValid,
+      isTipoUsuarioValid: $isTipoUsuarioValid,
+      isValidNumber: $isValidNumber,
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,

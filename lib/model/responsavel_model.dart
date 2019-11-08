@@ -1,20 +1,16 @@
 class UsuarioModel {
   String id;
-  String idade;
-  String userName;
   String nome;
   String uf;
   String cpf;
   String dataNasc;
   String cep;
   String number;
-  String tipoUsuario;
+  bool tipoUsuario;
 
   UsuarioModel(
             {
               this.id,
-              this.idade,
-              this.userName,
               this.tipoUsuario,
               this.nome,
               this.uf,
@@ -28,9 +24,7 @@ class UsuarioModel {
   Map<String, dynamic> toJson() => {
     "id": id,
     "nome": nome,
-    "userName": userName,
     "tipoUsuario": tipoUsuario,
-    "idade": idade,
     "uf": uf,
     "cpf": cpf,
     "dataNasc": dataNasc,
@@ -51,9 +45,7 @@ class UsuarioModel {
       uf: data["uf"] ?? "",
       cep: data["cep"] ?? "",
       number: data["number"] ?? "",
-      idade: data["idade"] ?? "",
-      userName: data["userName"] ?? "",
-      tipoUsuario: data["tipoUsuario"] ?? "",
+      tipoUsuario: data["tipoUsuario"] ?? true,
     );
   }
 }
