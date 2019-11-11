@@ -1,4 +1,4 @@
-name: anjo_guarda
+name: anjo
 description: A new Flutter project.
 
 version: 1.0.0+1
@@ -9,14 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^0.12.9+6
   cupertino_icons: ^0.1.2
-  firebase_auth: ^0.14.0+5
-  google_sign_in: ^4.0.1+1
-  flutter_bloc: ^0.11.0
-  equatable: ^0.2.0
-  meta: ^1.1.6
-  font_awesome_flutter: ^8.4.0
+  cloud_firestore: ^0.12.10
+  firebase_auth: ^0.14.0+8
   masked_text: ^0.0.6
 
 dev_dependencies:
@@ -29,4 +24,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo.png
-
