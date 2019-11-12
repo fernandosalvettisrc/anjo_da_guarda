@@ -36,6 +36,8 @@ class _CadastroState extends State<Cadastro> {
         if (nome.isNotEmpty) {
           if (email.isNotEmpty && email.contains("@")) {
             if (senha.isNotEmpty && senha.length > 6) {
+              
+              
               Usuario usuario = Usuario();
               usuario.setNome = nome;
               usuario.setEmail = email;
@@ -87,10 +89,16 @@ class _CadastroState extends State<Cadastro> {
         case "responsavel":
           Navigator.pushNamedAndRemoveUntil(
               context, "/painelResponsavel", (_) => false);
+              setState(() {
+                _mensagemErro = "sou responsavel";
+              });
           break;
         case "tutorado":
           Navigator.pushNamedAndRemoveUntil(
               context, "/painelTutorado", (_) => false);
+              setState(() {
+                _mensagemErro = "sou tutorado";
+              });
           break;
       }
     }).catchError((error) {
