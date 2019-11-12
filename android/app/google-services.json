@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "417155491658",
+    "firebase_url": "https://anjodaguarda-e3136.firebaseio.com",
+    "project_id": "anjodaguarda-e3136",
+    "storage_bucket": "anjodaguarda-e3136.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417155491658:android:9d94fce2656c58474b43b3",
+        "android_client_info": {
+          "package_name": "com.example.anjotcc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417155491658-0lk4s4ej9btksr55dolb47g0jfc319er.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anjotcc",
+            "certificate_hash": "44827f2bb0e2dca7eadc99cab11e69db16089843"
+          }
+        },
+        {
+          "client_id": "417155491658-8fd8jk6ruk5esfqbln549ofbb0567g5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiCzLefLZQkIo4mlDyTsOEusORkQLgFEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417155491658-8fd8jk6ruk5esfqbln549ofbb0567g5o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
