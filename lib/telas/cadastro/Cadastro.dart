@@ -148,7 +148,7 @@ class _CadastroState extends State<Cadastro> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     controller: _controllerSenha,
-                    obscureText: true,
+                    obscureText: _obscureTextSenha,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: "Senha",
