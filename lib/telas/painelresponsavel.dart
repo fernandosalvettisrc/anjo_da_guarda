@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:anjotcc/model/usuario.dart';
 import 'package:anjotcc/telas/cadastro_tutorado.dart';
+import 'package:anjotcc/telas/criarrota.dart';
 import 'package:anjotcc/telas/emmanutencao.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:geolocator/geolocator.dart';
 
 class PainelResponsavel extends StatefulWidget {
   Usuario usuario;
@@ -14,11 +17,11 @@ class PainelResponsavel extends StatefulWidget {
 
 class _PainelResponsavelState extends State<PainelResponsavel> {
   List<String> itensMenu = ["configuraçoes", "Deslogar"];
-  GoogleMapController mapController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
+  Completer <GoogleMapController> _controller = Completer();
+  CameraPosition _cameraPosition =
+      CameraPosition(target: LatLng(-29.817131, -51.153620));
   void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+    _controller.complete(controller);
   }
 
   _deslogarUsuario() async {
@@ -27,6 +30,47 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     Navigator.pushReplacementNamed(context, "/");
   }
 
+  _recuperaUltimaloc() async {
+    Position position = await Geolocator()
+        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      if (position != null) {
+        _cameraPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 19,
+        );
+        movimentarCamera(_cameraPosition);
+      }
+    });
+  }
+
+  _listenerLocalizacao() async{
+    var geoLocator = Geolocator();
+    var locationsOptions = LocationOptions(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+    geoLocator.getPositionStream(locationsOptions).listen((Position position){
+        _cameraPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 19,
+        );
+        movimentarCamera(_cameraPosition);
+    });
+  }
+
+  movimentarCamera(CameraPosition cameraPosition) async {
+    GoogleMapController googleMapController = await _controller.future;
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
+
+  @override
+  void initState() {
+    _recuperaUltimaloc();
+    _listenerLocalizacao();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +78,7 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
       appBar: AppBar(
         backgroundColor: Colors.teal[900],
         title: Text("Painel Responsavel"),
-        actions: <Widget>[
-        ],
+        actions: <Widget>[],
       ),
       drawer: Drawer(
         child: ListView(
@@ -47,25 +90,49 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
                 color: Colors.teal[900],
               ),
             ),
+              ListTile(
+              title: Text('Definir rota'),
+              leading: Icon(
+                Icons.place,
+                color: Colors.teal[900],
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CriarRota()));
+              },
+            ),
             ListTile(
               title: Text('Chat'),
-              leading: Icon(Icons.forum, color: Colors.teal[900],),
+              leading: Icon(
+                Icons.forum,
+                color: Colors.teal[900],
+              ),
               onTap: () {
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EmManutencao()));
+                    MaterialPageRoute(builder: (context) => EmManutencao()));
               },
             ),
-             ListTile(
+            ListTile(
               title: Text('Cadastrar Tutorado'),
-              leading: Icon(Icons.person_add, color: Colors.teal[900],),
+              leading: Icon(
+                Icons.person_add,
+                color: Colors.teal[900],
+              ),
               onTap: () {
-                Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CadastroTutorado()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CadastroTutorado()));
               },
             ),
-             ListTile(
+            ListTile(
               title: Text('Sair'),
-              leading: Icon(Icons.clear, color: Colors.teal[900],),
+              leading: Icon(
+                Icons.clear,
+                color: Colors.teal[900],
+              ),
               onTap: () {
                 _deslogarUsuario();
               },
@@ -76,10 +143,8 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
       body: Container(
         child: GoogleMap(
           onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
+          initialCameraPosition: _cameraPosition,
+          myLocationEnabled: true,
         ),
       ),
     );

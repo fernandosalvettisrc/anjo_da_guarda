@@ -71,6 +71,7 @@ class _CadastroState extends State<CadastroResponsavel> {
     }
   }
 
+ 
   _cadastrarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
     Firestore db = Firestore.instance;
