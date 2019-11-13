@@ -78,7 +78,7 @@ class _HomeState extends State<Login> {
         .document(idUsuario)
         .get();
     Map<String,dynamic> dados=snapshot.data;
-    String tipoUsuario  =dados["tipoUsuario"];
+    String tipoUsuario  = dados["tipoUsuario"];
     setState(() {
       _Carregando=false;
 

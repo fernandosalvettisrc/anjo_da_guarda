@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masked_text/masked_text.dart';
 
-class Cadastro extends StatefulWidget {
+class CadastroResponsavel extends StatefulWidget {
   @override
   _CadastroState createState() => _CadastroState();
 }
 
-class _CadastroState extends State<Cadastro> {
+class _CadastroState extends State<CadastroResponsavel> {
   TextEditingController _controllerNome = TextEditingController();
   TextEditingController _controllerIdade = TextEditingController();
   TextEditingController _controllerCep = TextEditingController();
@@ -32,7 +32,7 @@ class _CadastroState extends State<Cadastro> {
     String cep = _controllerCep.text;
 
     //validar campos
-    if (int.parse(idade) >= 18 && _tipoUsuario == false || int.parse(idade) <= 14 && _tipoUsuario == true)  {
+    if (int.parse(idade) >= 18 && _tipoUsuario == false)  {
       if (nome.isNotEmpty) {
         if (email.isNotEmpty && email.contains("@")) {
           if (senha.isNotEmpty && senha.length > 6) {
@@ -66,7 +66,7 @@ class _CadastroState extends State<Cadastro> {
       }
     } else {
       setState(() {
-        _mensagemErro = "Você não pode selecionar este tipo de usuário";
+        _mensagemErro = "Você não pode ser um responsável, você possuí menos de 18 anos";
       });
     }
   }
@@ -85,20 +85,20 @@ class _CadastroState extends State<Cadastro> {
           .setData(usuario.toMap());
 
       //redireciona para o painel, de acordo com o tipoUsuario
-      switch (usuario.tipoUsuario) {
-        case "responsavel":
+       switch( usuario.tipoUsuario ){
+        case "responsavel" :
           Navigator.pushNamedAndRemoveUntil(
-              context, "/painelResponsavel", (_) => false);
-          setState(() {
-            _mensagemErro = "sou responsavel";
-          });
+              context,
+              "/painelResponsavel",
+              (_) => false
+          );
           break;
-        case "tutorado":
+        case "tutorado" :
           Navigator.pushNamedAndRemoveUntil(
-              context, "/painelTutorado", (_) => false);
-          setState(() {
-            _mensagemErro = "sou tutorado";
-          });
+              context,
+              "/painelTutorado",
+                  (_) => false
+          );
           break;
       }
     }).catchError((error) {
@@ -237,24 +237,6 @@ class _CadastroState extends State<Cadastro> {
                       ),
                       prefixIcon: Icon(Icons.mail, color: Colors.teal[900]),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Responsavel"),
-                      Switch(
-                          value: _tipoUsuario,
-                          onChanged: (bool valor) {
-                            setState(() {
-                              _tipoUsuario = valor;
-                            });
-                          }),
-                      Text("Tutorado"),
-                    ],
                   ),
                 ),
                 Padding(

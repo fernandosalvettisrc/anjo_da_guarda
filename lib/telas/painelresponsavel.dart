@@ -1,8 +1,12 @@
+import 'package:anjotcc/model/usuario.dart';
+import 'package:anjotcc/telas/emmanutencao.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+
 class PainelResponsavel extends StatefulWidget {
+  Usuario usuario;
   @override
   _PainelResponsavelState createState() => _PainelResponsavelState();
 }
@@ -37,6 +41,7 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal[900],
         title: Text("Painel Responsavel"),
         actions: <Widget>[
           PopupMenuButton<String>(
@@ -51,6 +56,47 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
             },
           )
         ],
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("teste", style: TextStyle(color: Colors.white)),
+              decoration: BoxDecoration(
+                color: Colors.teal[900],
+              ),
+            ),
+            ListTile(
+              title: Text('Chat'),
+              leading: Icon(Icons.forum, color: Colors.teal[900],),
+              onTap: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EmManutencao()));
+              },
+            ),
+             ListTile(
+              title: Text('Cadastrar Tutorado'),
+              leading: Icon(Icons.person_add, color: Colors.teal[900],),
+              onTap: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EmManutencao()));
+              },
+            ),
+             ListTile(
+              title: Text('Sair'),
+              leading: Icon(Icons.clear, color: Colors.teal[900],),
+              onTap: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EmManutencao()));
+              },
+            ),
+          ],
+        ),
       ),
       body: Container(
         child: GoogleMap(

@@ -1,9 +1,8 @@
-import 'package:anjotcc/telas/cadastro.dart';
+import 'package:anjotcc/telas/cadastro_responsavel.dart';
 import 'package:anjotcc/telas/login.dart';
-import 'package:flutter/material.dart';
-import 'package:anjotcc/telas/paineltutuorado.dart';
 import 'package:anjotcc/telas/painelresponsavel.dart';
-
+import 'package:anjotcc/telas/paineltutuorado.dart';
+import 'package:flutter/material.dart';
 class Rotas {
 
   static Route<dynamic> gerarRotas(RouteSettings settings){
@@ -15,7 +14,7 @@ class Rotas {
         );
       case "/cadastro" :
         return MaterialPageRoute(
-            builder: (_) => Cadastro()
+            builder: (_) => CadastroResponsavel()
         );
       case "/painelResponsavel" :
         return MaterialPageRoute(
