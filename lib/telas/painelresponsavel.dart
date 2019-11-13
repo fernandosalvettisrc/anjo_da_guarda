@@ -1,4 +1,5 @@
 import 'package:anjotcc/model/usuario.dart';
+import 'package:anjotcc/telas/cadastro_tutorado.dart';
 import 'package:anjotcc/telas/emmanutencao.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,16 +27,6 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     Navigator.pushReplacementNamed(context, "/");
   }
 
-  _escolhaItemMenu(String escolha) {
-    switch (escolha) {
-      case "Deslogar":
-        _deslogarUsuario();
-        break;
-      case "Configuraçao":
-      //criar metodo
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +35,10 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
         backgroundColor: Colors.teal[900],
         title: Text("Painel Responsavel"),
         actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: _escolhaItemMenu,
-            itemBuilder: (context) {
-              return itensMenu.map((String item) {
-                return PopupMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList();
-            },
-          )
         ],
       ),
       drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
@@ -84,15 +60,14 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
               leading: Icon(Icons.person_add, color: Colors.teal[900],),
               onTap: () {
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EmManutencao()));
+                MaterialPageRoute(builder: (context) => CadastroTutorado()));
               },
             ),
              ListTile(
               title: Text('Sair'),
               leading: Icon(Icons.clear, color: Colors.teal[900],),
               onTap: () {
-                Navigator.push(context,
-                MaterialPageRoute(builder: (context) => EmManutencao()));
+                _deslogarUsuario();
               },
             ),
           ],
