@@ -1,4 +1,5 @@
 import 'package:anjotcc/telas/login.dart';
+import 'package:anjotcc/telas/paineltutuorado.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,7 +12,7 @@ final ThemeData temaPadrao = ThemeData(
 
 void main() => runApp(MaterialApp(
   title: "Anjo da guarda",
-  home: Login(),
+  home: PainelTutorado(),
   theme: temaPadrao,
   initialRoute: "/",
   onGenerateRoute: Rotas.gerarRotas,
