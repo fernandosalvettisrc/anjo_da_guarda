@@ -11,7 +11,7 @@ class Login extends StatefulWidget {
 class _HomeState extends State<Login> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
-  bool _Carregando=false;
+  bool _Carregando = false;
   var linearGradient = const BoxDecoration(
     gradient: const LinearGradient(
       begin: FractionalOffset.topCenter,
@@ -57,34 +57,30 @@ class _HomeState extends State<Login> {
   _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
     setState(() {
-      _Carregando=true;
-
-
+      _Carregando = true;
     });
 
     auth
         .signInWithEmailAndPassword(
-        email: usuario.email, password: usuario.senha)
+            email: usuario.email, password: usuario.senha)
         .then((firebaseUser) {
       Navigator.pushReplacementNamed(context, "/painelResponsavel");
     }).catchError((error) {
       _mensagemErro =
-      "Erro ao autenticar o usuario, Verifique e tente novamente";
+          "Erro ao autenticar o usuario, Verifique e tente novamente";
     });
   }
-  _RedirecionaPainelTipoUsuario(String idUsuario) async{
-    Firestore bd=Firestore.instance;
-    DocumentSnapshot snapshot= await bd.collection("usuarios")
-        .document(idUsuario)
-        .get();
-    Map<String,dynamic> dados=snapshot.data;
-    String tipoUsuario  = dados["tipoUsuario"];
+
+  _RedirecionaPainelTipoUsuario(String idUsuario) async {
+    Firestore bd = Firestore.instance;
+    DocumentSnapshot snapshot =
+        await bd.collection("usuarios").document(idUsuario).get();
+    Map<String, dynamic> dados = snapshot.data;
+    String tipoUsuario = dados["tipoUsuario"];
     setState(() {
-      _Carregando=false;
-
-
+      _Carregando = false;
     });
-    switch(tipoUsuario){
+    switch (tipoUsuario) {
       case "responsavel":
         Navigator.pushReplacementNamed(context, "/painelResponsavel");
         //direciona para painel responsavel
@@ -93,20 +89,18 @@ class _HomeState extends State<Login> {
         Navigator.pushReplacementNamed(context, "/painelTutorado");
         //redireciona para paineltutorado
         break;
-
     }
-
-
   }
-  _verificaLogado() async{
-    FirebaseAuth auth=FirebaseAuth.instance;
-    FirebaseUser usuarioLogado=await auth.currentUser();
-    if(usuarioLogado!=null){
-      String idUsuario=usuarioLogado.uid;
+
+  _verificaLogado() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser usuarioLogado = await auth.currentUser();
+    if (usuarioLogado != null) {
+      String idUsuario = usuarioLogado.uid;
       _RedirecionaPainelTipoUsuario(idUsuario);
     }
-
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -159,7 +153,9 @@ class _HomeState extends State<Login> {
                     color: Colors.white,
                     child: Text(
                       "Entrar",
-                      style: TextStyle(color: Colors.black,),
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                     onPressed: () {
                       _validarCampos();
@@ -174,8 +170,13 @@ class _HomeState extends State<Login> {
                   Navigator.pushNamed(context, "/cadastro");
                 },
               ),
-              _Carregando ? Center(child: CircularProgressIndicator(backgroundColor: Colors.green,),)
-                  :Container(),
+              _Carregando
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.green,
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: EdgeInsets.only(top: 16),
                 child: Center(
@@ -185,7 +186,6 @@ class _HomeState extends State<Login> {
                   ),
                 ),
               )
-
             ],
           ),
         ),

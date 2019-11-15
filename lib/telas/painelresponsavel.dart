@@ -16,7 +16,6 @@ class PainelResponsavel extends StatefulWidget {
 }
 
 class _PainelResponsavelState extends State<PainelResponsavel> {
-  List<String> itensMenu = ["configuraçoes", "Deslogar"];
   Completer <GoogleMapController> _controller = Completer();
   CameraPosition _cameraPosition =
       CameraPosition(target: LatLng(-29.817131, -51.153620));

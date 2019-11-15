@@ -1,3 +1,4 @@
+import 'package:anjotcc/model/id.dart';
 import 'package:flutter/material.dart';
 import 'package:anjotcc/model/Usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,16 +98,25 @@ class _CadastroState extends State<CadastroTutorado> {
     Firestore db = Firestore.instance;
     int hora = new DateTime.now().millisecondsSinceEpoch;
     String idTutorado = hora.toString();
+    Id idTuto = Id();
+    idTuto.idEstrangeira = idTutorado;
+    Id idRespon = Id();
+    idRespon.idEstrangeira = id;
     auth
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
         .then((firebaseUser) {
-      db  
+      db
           .collection("usuarios")
-          .document(idTutorado).collection("idResponsavel").document(id)
+          .document(firebaseUser.user.uid)
           .setData(usuario.toMap());
+          db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(id).setData(idRespon.toMap());
       //redireciona para o painel, de acordo com o tipoUsuario
-      db.collection("usuarios").document(id).collection("idTutorado").document(idTutorado);
+      db
+          .collection("usuarios")
+          .document(id)
+          .collection("idTutorado")
+          .document(firebaseUser.user.uid).setData(idTuto.toMap());
       switch (usuario.tipoUsuario) {
         case "responsavel":
           Navigator.pushNamedAndRemoveUntil(
