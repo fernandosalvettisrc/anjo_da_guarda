@@ -107,14 +107,14 @@ class _CadastroState extends State<CadastroTutorado> {
           .collection("usuarios")
           .document(firebaseUser.user.uid)
           .setData(usuario.toMap());
-          db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(id).setData(idRespon.toMap());
+          db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(firebaseUser.user.uid).setData(idRespon.toMap());
       //redireciona para o painel, de acordo com o tipoUsuario
       idTuto.idEstrangeira = firebaseUser.user.uid;
       db
           .collection("usuarios")
           .document(id)
           .collection("idTutorado")
-          .document(firebaseUser.user.uid).setData(idTuto.toMap());
+          .document(id).setData(idTuto.toMap());
       switch (usuario.tipoUsuario) {
         case "responsavel":
           Navigator.pushNamedAndRemoveUntil(
