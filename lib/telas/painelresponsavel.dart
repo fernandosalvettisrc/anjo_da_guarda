@@ -75,11 +75,6 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.teal[900],
-        title: Text("Painel Responsavel"),
-        actions: <Widget>[],
-      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

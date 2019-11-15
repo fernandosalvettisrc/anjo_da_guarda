@@ -41,7 +41,7 @@ class _PainelTutoradoState extends State<PainelTutorado> {
       if (position != null) {
         _cameraPosition = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 13,
+          zoom: 19,
         );
         movimentarCamera(_cameraPosition);
         db

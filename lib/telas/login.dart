@@ -11,7 +11,7 @@ class Login extends StatefulWidget {
 class _HomeState extends State<Login> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
-  bool _Carregando = false;
+  bool _carregando = false;
   var linearGradient = const BoxDecoration(
     gradient: const LinearGradient(
       begin: FractionalOffset.topCenter,
@@ -57,28 +57,29 @@ class _HomeState extends State<Login> {
   _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
     setState(() {
-      _Carregando = true;
+      _carregando = true;
     });
 
     auth
         .signInWithEmailAndPassword(
             email: usuario.email, password: usuario.senha)
         .then((firebaseUser) {
-      Navigator.pushReplacementNamed(context, "/painelResponsavel");
+          _redirecionaPainelTipoUsuario(firebaseUser.user.uid);
+     // Navigator.pushReplacementNamed(context, "/painelResponsavel");
     }).catchError((error) {
       _mensagemErro =
           "Erro ao autenticar o usuario, Verifique e tente novamente";
     });
   }
 
-  _RedirecionaPainelTipoUsuario(String idUsuario) async {
+  _redirecionaPainelTipoUsuario(String idUsuario) async {
     Firestore bd = Firestore.instance;
     DocumentSnapshot snapshot =
         await bd.collection("usuarios").document(idUsuario).get();
     Map<String, dynamic> dados = snapshot.data;
     String tipoUsuario = dados["tipoUsuario"];
     setState(() {
-      _Carregando = false;
+      _carregando = false;
     });
     switch (tipoUsuario) {
       case "responsavel":
@@ -97,13 +98,12 @@ class _HomeState extends State<Login> {
     FirebaseUser usuarioLogado = await auth.currentUser();
     if (usuarioLogado != null) {
       String idUsuario = usuarioLogado.uid;
-      _RedirecionaPainelTipoUsuario(idUsuario);
+      _redirecionaPainelTipoUsuario(idUsuario);
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _verificaLogado();
   }
@@ -170,7 +170,7 @@ class _HomeState extends State<Login> {
                   Navigator.pushNamed(context, "/cadastro");
                 },
               ),
-              _Carregando
+              _carregando
                   ? Center(
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.green,
