@@ -29,22 +29,22 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     Navigator.pushReplacementNamed(context, "/");
   }
 
-  _recuperaUltimaloc() async {
-    Position position = await Geolocator()
-        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+  // _recuperaUltimaloc() async {
+  //   Position position = await Geolocator()
+  //       .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
 
-    setState(() {
-      if (position != null) {
-        _cameraPosition = CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 19,
-        );
-        movimentarCamera(_cameraPosition);
-      }
-    });
-  }
+  //   setState(() {
+  //     if (position != null) {
+  //       _cameraPosition = CameraPosition(
+  //         target: LatLng(position.latitude, position.longitude),
+  //         zoom: 19,
+  //       );
+  //       movimentarCamera(_cameraPosition);
+  //     }
+  //   });
+  // }
 
-  _listenerLocalizacao() async{
+/*   //_listenerLocalizacao() async{
     var geoLocator = Geolocator();
     var locationsOptions = LocationOptions(
       accuracy: LocationAccuracy.high,
@@ -58,7 +58,7 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
         movimentarCamera(_cameraPosition);
         
     });
-  }
+  } */
 
   movimentarCamera(CameraPosition cameraPosition) async {
     GoogleMapController googleMapController = await _controller.future;
@@ -67,8 +67,8 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
 
   @override
   void initState() {
-    _recuperaUltimaloc();
-    _listenerLocalizacao();
+  /*   _recuperaUltimaloc();
+    _listenerLocalizacao(); */
     super.initState();
   }
 
