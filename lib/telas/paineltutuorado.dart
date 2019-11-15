@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:anjotcc/model/localizacao.dart';
+import 'package:anjotcc/telas/emmanutencao.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,14 +41,14 @@ class _PainelTutoradoState extends State<PainelTutorado> {
       if (position != null) {
         _cameraPosition = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 19,
+          zoom: 13,
         );
         movimentarCamera(_cameraPosition);
         db
             .collection("usuarios")
             .document(id)
             .collection("localizacao")
-            .document()
+            .document(id)
             .setData(localizacao.toMap());
       }
     });
@@ -79,7 +80,7 @@ class _PainelTutoradoState extends State<PainelTutorado> {
             .collection("usuarios")
             .document(id)
             .collection("localizacao")
-            .document()
+            .document(id)
             .setData(localizacao.toMap());
       }
     });
@@ -101,63 +102,76 @@ class _PainelTutoradoState extends State<PainelTutorado> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("painel tutorado"),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FlatButton.icon(
-                  onPressed: () => {},
-                  color: Colors.white,
-                  padding: EdgeInsets.all(10.0),
-                  label: Text("Alerta"),
-                  icon: Icon(Icons.warning, color: Colors.red),
-                ),
-                FlatButton.icon(
-                  onPressed: () => {},
-                  color: Colors.white,
-                  padding: EdgeInsets.all(10.0),
-                  icon: Icon(
-                    Icons.map,
-                    color: Colors.teal[900],
-                  ),
-                  label: Text("Minhas rotas"),
-                ),
-              ],
+            DrawerHeader(
+              child: Text("teste", style: TextStyle(color: Colors.white)),
+              decoration: BoxDecoration(
+                color: Colors.teal[900],
+              ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FlatButton.icon(
-                  onPressed: () => {},
-                  color: Colors.white,
-                  padding: EdgeInsets.all(10.0),
-                  label: Text("Minha localização"),
-                  icon: Icon(
-                    Icons.place,
-                    color: Colors.teal[900],
-                  ),
-                ),
-                FlatButton.icon(
-                  onPressed: () => {},
-                  color: Colors.white,
-                  padding: EdgeInsets.all(10.0),
-                  label: Text("Chat"),
-                  icon: Icon(
-                    Icons.forum,
-                    color: Colors.teal[900],
-                  ),
-                ),
-              ],
+            ListTile(
+              title: Text('Minhas rotas'),
+              leading: Icon(
+                Icons.place,
+                color: Colors.teal[900],
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EmManutencao()));
+              },
+            ),
+            ListTile(
+              title: Text('Chat'),
+              leading: Icon(
+                Icons.forum,
+                color: Colors.teal[900],
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EmManutencao()));
+              },
+            ),
+            ListTile(
+              title: Text('Sair'),
+              leading: Icon(
+                Icons.clear,
+                color: Colors.teal[900],
+              ),
+              onTap: () {
+                _deslogarUsuario();
+              },
             ),
           ],
-        ));
+        ),
+      ),
+      body: Container(
+        child: Stack(
+          children: <Widget>[
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: _cameraPosition,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+            ),
+             Positioned(
+            right: 0,
+            left: 0,
+            bottom: 0,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: RaisedButton(
+                child: Icon(Icons.warning, color: Colors.red, size: 40.0,),
+                onPressed: () {},
+                color: Colors.white,
+              ),
+            ),
+          )
+          ],
+        ),
+      ),
+    );
   }
 }

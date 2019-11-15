@@ -96,10 +96,7 @@ class _CadastroState extends State<CadastroTutorado> {
   _cadastrarUsuario(Usuario usuario, String id) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     Firestore db = Firestore.instance;
-    int hora = new DateTime.now().millisecondsSinceEpoch;
-    String idTutorado = hora.toString();
     Id idTuto = Id();
-    idTuto.idEstrangeira = idTutorado;
     Id idRespon = Id();
     idRespon.idEstrangeira = id;
     auth
@@ -112,6 +109,7 @@ class _CadastroState extends State<CadastroTutorado> {
           .setData(usuario.toMap());
           db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(id).setData(idRespon.toMap());
       //redireciona para o painel, de acordo com o tipoUsuario
+      idTuto.idEstrangeira = firebaseUser.user.uid;
       db
           .collection("usuarios")
           .document(id)
