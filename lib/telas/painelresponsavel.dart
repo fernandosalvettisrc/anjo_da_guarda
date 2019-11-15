@@ -57,6 +57,7 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
           zoom: 19,
         );
         movimentarCamera(_cameraPosition);
+        
     });
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PainelTutorado extends StatefulWidget {
@@ -8,7 +7,6 @@ class PainelTutorado extends StatefulWidget {
 }
 
 class _PainelTutoradoState extends State<PainelTutorado> {
-  final FirebaseMessaging _messaging = FirebaseMessaging();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

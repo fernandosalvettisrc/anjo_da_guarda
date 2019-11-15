@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:anjotcc/model/Usuario.dart';
+import 'package:anjotcc/model/usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masked_text/masked_text.dart';

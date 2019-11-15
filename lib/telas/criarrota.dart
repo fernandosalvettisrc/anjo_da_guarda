@@ -20,7 +20,6 @@ class _CriarRotaState extends State<CriarRota> {
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
-
   _recuperaUltimaloc() async {
     Position position = await Geolocator()
         .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);

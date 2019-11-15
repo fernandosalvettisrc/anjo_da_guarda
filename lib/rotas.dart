@@ -10,7 +10,7 @@ class Rotas {
     switch( settings.name ){
       case "/" :
         return MaterialPageRoute(
-            builder: (_) => PainelTutorado()
+            builder: (_) => Login()
         );
       case "/cadastro" :
         return MaterialPageRoute(
