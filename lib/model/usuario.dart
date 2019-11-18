@@ -9,6 +9,8 @@ class Usuario {
   String _datadeNascimento;
   String _cep;
   String _numeroCelular;
+  double latitude;
+  double longitude;
   Usuario();
 
   Map<String, dynamic> toMap(){
@@ -25,7 +27,17 @@ class Usuario {
     return map;
 
   }
+  
+  double get long => longitude;
 
+  double get lat => latitude;
+
+  set setLatitude(double lat) {
+    latitude = lat;
+  }
+  set setLongitude(double long) {
+    longitude = long;
+  }
   String verificaTipoUsuario(bool tipoUsuario){
     return tipoUsuario ? "tutorado" : "responsavel";
   }

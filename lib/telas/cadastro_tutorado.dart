@@ -108,23 +108,12 @@ class _CadastroState extends State<CadastroTutorado> {
           .document(firebaseUser.user.uid)
           .setData(usuario.toMap());
           db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(firebaseUser.user.uid).setData(idRespon.toMap());
-      //redireciona para o painel, de acordo com o tipoUsuario
       idTuto.idEstrangeira = firebaseUser.user.uid;
       db
           .collection("usuarios")
           .document(id)
           .collection("idTutorado")
           .document(id).setData(idTuto.toMap());
-      switch (usuario.tipoUsuario) {
-        case "responsavel":
-          Navigator.pushNamedAndRemoveUntil(
-              context, "/painelResponsavel", (_) => false);
-          break;
-        case "tutorado":
-          Navigator.pushNamedAndRemoveUntil(
-              context, "/painelTutorado", (_) => false);
-          break;
-      }
     }).catchError((error) {
       _mensagemErro = "Erro ao cadastrar o usuario, o e-mail já esta em uso";
     });

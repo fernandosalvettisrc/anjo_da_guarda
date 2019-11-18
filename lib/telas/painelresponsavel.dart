@@ -4,6 +4,8 @@ import 'package:anjotcc/model/usuario.dart';
 import 'package:anjotcc/telas/cadastro_tutorado.dart';
 import 'package:anjotcc/telas/criarrota.dart';
 import 'package:anjotcc/telas/emmanutencao.dart';
+import 'package:anjotcc/telas/historico_rotas.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,9 +18,11 @@ class PainelResponsavel extends StatefulWidget {
 }
 
 class _PainelResponsavelState extends State<PainelResponsavel> {
-  Completer <GoogleMapController> _controller = Completer();
+  Completer<GoogleMapController> _controller = Completer();
   CameraPosition _cameraPosition =
       CameraPosition(target: LatLng(-29.817131, -51.153620));
+  List<Marker> marcador = [];
+
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
@@ -29,47 +33,88 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     Navigator.pushReplacementNamed(context, "/");
   }
 
-  // _recuperaUltimaloc() async {
-  //   Position position = await Geolocator()
-  //       .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+  _pegaDados() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser usuarioLogado = await auth.currentUser();
+    String idUsuario = usuarioLogado.uid;
+    Firestore bd = Firestore.instance;
+    //pega id do Filho
+    DocumentSnapshot snapshot = await bd
+        .collection("usuarios")
+        .document(idUsuario)
+        .collection("idTutorado")
+        .document(idUsuario)
+        .get();
+    Map<String, dynamic> dados = snapshot.data;
+    String idFilho = dados["id"];
+    //pega localização do filho
+    if (dados != null) {
+      DocumentSnapshot snapshotFilho = await bd
+          .collection("usuarios")
+          .document(idFilho)
+          .collection("localizacao")
+          .document(idFilho)
+          .get();
+      Map<String, dynamic> dadosFilho = snapshotFilho.data;
+      double lat = dadosFilho["latitude"];
+      double long = dadosFilho["longitude"];
+      _pegaLocalizacao(lat, long);
+      _exibirMarcador(lat, long);
+    }
+  }
 
-  //   setState(() {
-  //     if (position != null) {
-  //       _cameraPosition = CameraPosition(
-  //         target: LatLng(position.latitude, position.longitude),
-  //         zoom: 19,
-  //       );
-  //       movimentarCamera(_cameraPosition);
-  //     }
-  //   });
-  // }
+  _exibirMarcador(double lat, double long) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser usuarioLogado = await auth.currentUser();
+    String idUsuario = usuarioLogado.uid;
+    Firestore bd = Firestore.instance;
+    //pega id do Filho
+    DocumentSnapshot snapshot = await bd
+        .collection("usuarios")
+        .document(idUsuario)
+        .collection("idTutorado")
+        .document(idUsuario)
+        .get();
+    Map<String, dynamic> dados = snapshot.data;
+    String idFilho = dados["id"];
+    //pega localização do filho
+    if (dados != null) {
+      DocumentSnapshot snapshotFilho =
+          await bd.collection("usuarios").document(idFilho).get();
+      Map<String, dynamic> dadosFilho = snapshotFilho.data;
+      String nome = dadosFilho["nome"];
+      setState(() {
+        marcador.add(Marker(
+            markerId: MarkerId("tutorado"),
+            infoWindow: InfoWindow(title: nome),
+            position: LatLng(lat, long)));
+      });
+    }
+  }
 
-/*   //_listenerLocalizacao() async{
-    var geoLocator = Geolocator();
-    var locationsOptions = LocationOptions(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
-    );
-    geoLocator.getPositionStream(locationsOptions).listen((Position position){
-        _cameraPosition = CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 19,
-        );
+  _pegaLocalizacao(double lat, double long) async {
+    Position position = await Geolocator()
+        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      if (position != null) {
+        _cameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 19);
+
         movimentarCamera(_cameraPosition);
-        
+      }
     });
-  } */
+  }
 
   movimentarCamera(CameraPosition cameraPosition) async {
     GoogleMapController googleMapController = await _controller.future;
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   @override
   void initState() {
-  /*   _recuperaUltimaloc();
-    _listenerLocalizacao(); */
     super.initState();
+    _pegaDados();
   }
 
   @override
@@ -80,22 +125,24 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text("teste", style: TextStyle(color: Colors.white)),
+              child: Image.asset(
+                'assets/logo.png',
+                height: 200,
+                width: 200,
+              ),
               decoration: BoxDecoration(
-                color: Colors.teal[900],
+                color: Colors.white,
               ),
             ),
-              ListTile(
+            ListTile(
               title: Text('Definir rota'),
               leading: Icon(
                 Icons.place,
                 color: Colors.teal[900],
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CriarRota()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CriarRota()));
               },
             ),
             ListTile(
@@ -123,6 +170,19 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
               },
             ),
             ListTile(
+              title: Text('Visualizar dados do perfil'),
+              leading: Icon(
+                Icons.person,
+                color: Colors.teal[900],
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EmManutencao()));
+              },
+            ),
+            ListTile(
               title: Text('Sair'),
               leading: Icon(
                 Icons.clear,
@@ -136,12 +196,35 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
         ),
       ),
       body: Container(
-        child: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: _cameraPosition,
-          myLocationEnabled: true,
-        ),
-      ),
+          child: Stack(
+        children: <Widget>[
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: _cameraPosition,
+            myLocationEnabled: false,
+            myLocationButtonEnabled: false,
+            markers: Set.from(marcador),
+          ),
+          Positioned(
+            right: 0,
+            left: 280,
+            top: 0,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: RaisedButton(
+                child: Icon(
+                  Icons.gps_fixed,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  _pegaDados();
+                },
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      )),
     );
   }
 }
