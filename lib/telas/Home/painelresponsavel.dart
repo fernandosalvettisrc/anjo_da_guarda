@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:anjotcc/model/usuario.dart';
-import 'package:anjotcc/telas/cadastro_tutorado.dart';
-import 'package:anjotcc/telas/criarrota.dart';
-import 'package:anjotcc/telas/emmanutencao.dart';
-import 'package:anjotcc/telas/historico_rotas.dart';
+import 'package:anjotcc/telas/Cadastro/cadastro_tutorado.dart';
+import 'package:anjotcc/telas/EmManutencao/emmanutencao.dart';
+import 'package:anjotcc/telas/Rota/criarrota.dart';
+import 'package:anjotcc/telas/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,27 +39,60 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     String idUsuario = usuarioLogado.uid;
     Firestore bd = Firestore.instance;
     //pega id do Filho
-    DocumentSnapshot snapshot = await bd
-        .collection("usuarios")
-        .document(idUsuario)
-        .collection("idTutorado")
-        .document(idUsuario)
-        .get();
+    DocumentSnapshot snapshot =
+        await bd.collection("usuarios").document(idUsuario).get();
     Map<String, dynamic> dados = snapshot.data;
-    String idFilho = dados["id"];
+    String idFilho = dados["idconecta"];
     //pega localização do filho
-    if (dados != null) {
-      DocumentSnapshot snapshotFilho = await bd
-          .collection("usuarios")
-          .document(idFilho)
-          .collection("localizacao")
-          .document(idFilho)
-          .get();
-      Map<String, dynamic> dadosFilho = snapshotFilho.data;
-      double lat = dadosFilho["latitude"];
-      double long = dadosFilho["longitude"];
-      _pegaLocalizacao(lat, long);
-      _exibirMarcador(lat, long);
+    if (idFilho != null) {
+      DocumentSnapshot documentSnapshotFilho =
+          await bd.collection("usuarios").document(idFilho).get();
+      Map<String, dynamic> dados = documentSnapshotFilho.data;
+      String nome = dados["nome"];
+      double lat = dados["latitude"];
+      double long = dados["longitude"];
+      if (lat != 0.0 && long != 0.0) {
+        _pegaLocalizacao(lat, long);
+        _exibirMarcador(lat, long);
+      } else {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                    "$nome ainda não fez um primeiro login no app, não é possível pegar a sua localização atual"),
+                contentPadding: EdgeInsets.all(10),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Cadastrar"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            });
+      }
+    } else {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Você precisa cadastrar seu tutorado!!"),
+              contentPadding: EdgeInsets.all(10),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Cadastrar"),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CadastroTutorado()));
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -69,14 +102,10 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
     String idUsuario = usuarioLogado.uid;
     Firestore bd = Firestore.instance;
     //pega id do Filho
-    DocumentSnapshot snapshot = await bd
-        .collection("usuarios")
-        .document(idUsuario)
-        .collection("idTutorado")
-        .document(idUsuario)
-        .get();
+    DocumentSnapshot snapshot =
+        await bd.collection("usuarios").document(idUsuario).get();
     Map<String, dynamic> dados = snapshot.data;
-    String idFilho = dados["id"];
+    String idFilho = dados["idconecta"];
     //pega localização do filho
     if (dados != null) {
       DocumentSnapshot snapshotFilho =
@@ -152,21 +181,8 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
                 color: Colors.teal[900],
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EmManutencao()));
-              },
-            ),
-            ListTile(
-              title: Text('Cadastrar Tutorado'),
-              leading: Icon(
-                Icons.person_add,
-                color: Colors.teal[900],
-              ),
-              onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CadastroTutorado()));
+                    context, MaterialPageRoute(builder: (context) => Chat()));
               },
             ),
             ListTile(
@@ -176,10 +192,8 @@ class _PainelResponsavelState extends State<PainelResponsavel> {
                 color: Colors.teal[900],
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EmManutencao()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EmManutencao()));
               },
             ),
             ListTile(

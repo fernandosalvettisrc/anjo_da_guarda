@@ -39,27 +39,40 @@ class _CriarRotaState extends State<CriarRota> {
     String idUsuario = usuarioLogado.uid;
     Firestore bd = Firestore.instance;
     //pega id do Filho
-    DocumentSnapshot snapshot = await bd
-        .collection("usuarios")
-        .document(idUsuario)
-        .collection("idTutorado")
-        .document(idUsuario)
-        .get();
+    DocumentSnapshot snapshot =
+        await bd.collection("usuarios").document(idUsuario).get();
     Map<String, dynamic> dados = snapshot.data;
-    String idFilho = dados["id"];
+    String idFilho = dados["idconecta"];
     //pega localização do filho
     if (dados != null) {
-      DocumentSnapshot snapshotFilho = await bd
-          .collection("usuarios")
-          .document(idFilho)
-          .collection("localizacao")
-          .document(idFilho)
-          .get();
-      Map<String, dynamic> dadosFilho = snapshotFilho.data;
-      double lat = dadosFilho["latitude"];
-      double long = dadosFilho["longitude"];
-      _pegaLocalizacao(lat, long);
-      _exibirMarcador(lat, long);
+      DocumentSnapshot documentSnapshotFilho =
+          await bd.collection("usuarios").document(idFilho).get();
+      Map<String, dynamic> dados = documentSnapshotFilho.data;
+      double lat = dados["latitude"];
+      double long = dados["longitude"];
+      if (lat != 0.0 && long != 0.0) {
+        _pegaLocalizacao(lat, long);
+        _exibirMarcador(lat, long);
+      }
+    } else {
+      String nome = dados["nome"];
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                  "$nome ainda não fez um primeiro login no app, não é possível pegar a sua localização atual"),
+              contentPadding: EdgeInsets.all(10),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Cadastrar"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
     }
   }
 
@@ -69,14 +82,10 @@ class _CriarRotaState extends State<CriarRota> {
     String idUsuario = usuarioLogado.uid;
     Firestore bd = Firestore.instance;
     //pega id do Filho
-    DocumentSnapshot snapshot = await bd
-        .collection("usuarios")
-        .document(idUsuario)
-        .collection("idTutorado")
-        .document(idUsuario)
-        .get();
+    DocumentSnapshot snapshot =
+        await bd.collection("usuarios").document(idUsuario).get();
     Map<String, dynamic> dados = snapshot.data;
-    String idFilho = dados["id"];
+    String idFilho = dados["idconecta"];
     //pega localização do filho
     if (dados != null) {
       DocumentSnapshot snapshotFilho =
@@ -143,12 +152,8 @@ class _CriarRotaState extends State<CriarRota> {
     requisicao.setRota = rota;
     Usuario responsavel = await UsuarioFirebase.getResponsavel();
     Usuario tutorado = await UsuarioFirebase.getTutorado();
-    DocumentSnapshot snapshotFilho = await db
-        .collection("usuarios")
-        .document(tutorado.idUsuario)
-        .collection("localizacao")
-        .document(tutorado.idUsuario)
-        .get();
+    DocumentSnapshot snapshotFilho =
+        await db.collection("usuarios").document(tutorado.idUsuario).get();
     Map<String, dynamic> dadosFilho = snapshotFilho.data;
     double lat = dadosFilho["latitude"];
     double long = dadosFilho["longitude"];

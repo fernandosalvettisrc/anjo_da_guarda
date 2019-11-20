@@ -1,3 +1,4 @@
+import 'package:anjotcc/repositories/cadastro_responsavel_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:anjotcc/model/usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class _CadastroState extends State<CadastroResponsavel> {
   Color corIcon = Colors.black;
   Color corIconSenha = Colors.black;
   bool _obscureTextSenha = true;
+  
   _validarCampos() {
     //Recuperar dados dos campos
     String nome = _controllerNome.text;
@@ -30,25 +32,23 @@ class _CadastroState extends State<CadastroResponsavel> {
     String idade = _controllerIdade.text;
     String celular = _controllerCelular.text;
     String cep = _controllerCep.text;
-
     //validar campos
-    if (int.parse(idade) >= 18 && _tipoUsuario == false)  {
+    if (int.parse(idade) >= 18 && _tipoUsuario == false) {
       if (nome.isNotEmpty) {
         if (email.isNotEmpty && email.contains("@")) {
           if (senha.isNotEmpty && senha.length > 6) {
-
-
             Usuario usuario = Usuario();
             usuario.setNome = nome;
             usuario.setEmail = email;
             usuario.setSenha = senha;
-            usuario.setTipoUsuario =
-                usuario.verificaTipoUsuario(_tipoUsuario);
+            usuario.setTipoUsuario = usuario.verificaTipoUsuario(_tipoUsuario);
             usuario.setdataNascimento = idade;
             usuario.setCep = cep;
             usuario.setCelular = celular;
 
-            _cadastrarUsuario(usuario);
+            CadastrarResponsavelRepository cadastroResponsavelRepository =
+                CadastrarResponsavelRepository();
+            cadastroResponsavelRepository.cadastrarUsuario(usuario, context);
           } else {
             setState(() {
               _mensagemErro = "Preencha a senha! digite mais de 6 caracteres";
@@ -66,46 +66,10 @@ class _CadastroState extends State<CadastroResponsavel> {
       }
     } else {
       setState(() {
-        _mensagemErro = "Você não pode ser um responsável, você possuí menos de 18 anos";
+        _mensagemErro =
+            "Você não pode ser um responsável, você possuí menos de 18 anos";
       });
     }
-  }
-
- 
-  _cadastrarUsuario(Usuario usuario) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    Firestore db = Firestore.instance;
-
-    auth
-        .createUserWithEmailAndPassword(
-        email: usuario.email, password: usuario.senha)
-        .then((firebaseUser) {
-      db
-          .collection("usuarios")
-          .document(firebaseUser.user.uid)
-          .setData(usuario.toMap());
-
-      //redireciona para o painel, de acordo com o tipoUsuario
-       switch( usuario.tipoUsuario ){
-        case "responsavel" :
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painelResponsavel",
-              (_) => false
-          );
-          break;
-        case "tutorado" :
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painelTutorado",
-                  (_) => false
-          );
-          break;
-      }
-    }).catchError((error) {
-      _mensagemErro =
-      "Erro ao cadastrar o usuario, o e-mail já esta em uso";
-    });
   }
 
   @override
@@ -204,7 +168,7 @@ class _CadastroState extends State<CadastroResponsavel> {
                           borderSide: new BorderSide(),
                         ),
                         prefixIcon:
-                        Icon(Icons.keyboard, color: Colors.teal[900])),
+                            Icon(Icons.keyboard, color: Colors.teal[900])),
                   ),
                 ),
                 Padding(
@@ -219,7 +183,7 @@ class _CadastroState extends State<CadastroResponsavel> {
                         borderSide: new BorderSide(),
                       ),
                       prefixIcon:
-                      Icon(Icons.calendar_today, color: Colors.teal[900]),
+                          Icon(Icons.calendar_today, color: Colors.teal[900]),
                     ),
                   ),
                 ),

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:anjotcc/model/localizacao.dart';
-import 'package:anjotcc/telas/emmanutencao.dart';
+import 'package:anjotcc/telas/EmManutencao/emmanutencao.dart';
+import 'package:anjotcc/telas/chat/chat.dart';
 import 'package:anjotcc/util/statusrequisicao.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:anjotcc/util/firebaseuser.dart';
 import 'package:flutter/cupertino.dart';
 
 class PainelTutorado extends StatefulWidget {
@@ -159,9 +159,7 @@ class _PainelTutoradoState extends State<PainelTutorado> {
       db
           .collection("usuarios")
           .document(id)
-          .collection("localizacao")
-          .document(id)
-          .setData(localizacao.toMap());
+          ..updateData({"latitude": position.latitude, "longitude" : position.longitude});
       movimentarCamera(_cameraPosition);
     });
     _exibirMarcador();
@@ -204,7 +202,7 @@ class _PainelTutoradoState extends State<PainelTutorado> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EmManutencao()));
+                    MaterialPageRoute(builder: (context) => Chat()));
               },
             ),
             ListTile(

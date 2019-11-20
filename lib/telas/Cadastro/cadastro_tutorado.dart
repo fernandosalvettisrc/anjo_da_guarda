@@ -1,7 +1,7 @@
-import 'package:anjotcc/model/id.dart';
+import 'package:anjotcc/repositories/cadastro_tutorado_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:anjotcc/model/Usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anjotcc/model/usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masked_text/masked_text.dart';
 
@@ -88,36 +88,14 @@ class _CadastroState extends State<CadastroTutorado> {
       usuario.setTipoUsuario = usuario.verificaTipoUsuario(_tipoUsuario);
       usuario.setdataNascimento = idade;
       usuario.setCep = cep;
-      usuario.setCelular = celular;
-      _cadastrarUsuario(usuario, idUsuario);
+      usuario.setCelular = celular; 
+      usuario.setidConecta = idUsuario;
+      CadastrarTutoradoRepository cadastrarTutoradoRepository = CadastrarTutoradoRepository();
+      cadastrarTutoradoRepository.cadastrarUsuario(usuario, idUsuario, context);
     }
   }
 
-  _cadastrarUsuario(Usuario usuario, String id) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    Firestore db = Firestore.instance;
-    Id idTuto = Id();
-    Id idRespon = Id();
-    idRespon.idEstrangeira = id;
-    auth
-        .createUserWithEmailAndPassword(
-            email: usuario.email, password: usuario.senha)
-        .then((firebaseUser) {
-      db
-          .collection("usuarios")
-          .document(firebaseUser.user.uid)
-          .setData(usuario.toMap());
-          db.collection("usuarios").document(firebaseUser.user.uid).collection("idResponsavel").document(firebaseUser.user.uid).setData(idRespon.toMap());
-      idTuto.idEstrangeira = firebaseUser.user.uid;
-      db
-          .collection("usuarios")
-          .document(id)
-          .collection("idTutorado")
-          .document(id).setData(idTuto.toMap());
-    }).catchError((error) {
-      _mensagemErro = "Erro ao cadastrar o usuario, o e-mail já esta em uso";
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {

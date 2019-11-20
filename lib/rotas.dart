@@ -1,7 +1,8 @@
-import 'package:anjotcc/telas/cadastro_responsavel.dart';
-import 'package:anjotcc/telas/login.dart';
-import 'package:anjotcc/telas/painelresponsavel.dart';
-import 'package:anjotcc/telas/paineltutuorado.dart';
+
+import 'package:anjotcc/telas/Cadastro/cadastro_responsavel.dart';
+import 'package:anjotcc/telas/Home/painelresponsavel.dart';
+import 'package:anjotcc/telas/Home/paineltutuorado.dart';
+import 'package:anjotcc/telas/Login/login.dart';
 import 'package:flutter/material.dart';
 class Rotas {
 

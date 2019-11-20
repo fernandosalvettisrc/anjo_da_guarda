@@ -11,6 +11,7 @@ class Usuario {
   String _numeroCelular;
   double latitude;
   double longitude;
+  String idConecta;
   Usuario();
 
   Map<String, dynamic> toMap(){
@@ -22,18 +23,26 @@ class Usuario {
       "_cep" : this._cep,
       "_dataNascimento" : this._datadeNascimento,
       "_numeroCelular" : this._numeroCelular,
+      "idconecta": this.idConecta ?? null,
+      "latitude": this.latitude ?? 0.0,
+      "longitude": this.longitude ?? 0.0,
     };
 
     return map;
 
   }
-  
+
+  String get idConeta => idConecta;
+
   double get long => longitude;
 
   double get lat => latitude;
 
   set setLatitude(double lat) {
     latitude = lat;
+  }
+  set setidConecta(String id){
+    idConecta = id;
   }
   set setLongitude(double long) {
     longitude = long;
